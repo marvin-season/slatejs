@@ -2,7 +2,7 @@ import { css } from '@emotion/css';
 import React, { FC } from 'react';
 import { RenderElementProps } from 'slate-react';
 
-const EditableButtonComponent: FC<RenderElementProps> = ({ attributes, children }) => {
+const EditableComponent: FC<RenderElementProps> = ({ attributes, children }) => {
   return (
     /*
       Note that this is not a true button, but a span with button-like CSS.
@@ -46,4 +46,4 @@ const InlineChromiumBugfix = () => (
 );
 
 
-export default EditableButtonComponent;
+export default EditableComponent;

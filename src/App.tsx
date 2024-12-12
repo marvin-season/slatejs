@@ -5,7 +5,7 @@ import * as SlateReact from 'slate-react';
 import { Editable, RenderElementProps, withReact } from 'slate-react';
 import { createEditor, Range, Transforms } from 'slate';
 import { withHistory } from 'slate-history';
-import EditableButtonComponent from './components/EditableButtonComponent.tsx';
+import EditableComponent from './components/EditableComponent.tsx';
 
 const initialValue = [
   {
@@ -18,7 +18,7 @@ const initialValue = [
         text: ', and here is a more unusual inline: an ',
       },
       {
-        type: 'button',
+        type: 'input',
         children: [
           { text: 'editable' },
         ],
@@ -46,7 +46,6 @@ const InlinesExample = () => {
     if (selection && Range.isCollapsed(selection)) {
       const { nativeEvent } = event;
       if (isKeyHotkey('left', nativeEvent)) {
-        console.log('left', nativeEvent);
         event.preventDefault();
         Transforms.move(editor, { unit: 'offset', reverse: true });
         return;
@@ -70,18 +69,20 @@ const InlinesExample = () => {
   );
 };
 const withInlines = (editor: ReturnType<typeof withHistory>) => {
-  const { isInline } =
+  const { isInline, isElementReadOnly } =
     editor;
   editor.isInline = element =>
-    ['button'].includes(element.type) || isInline(element);
+    ['input'].includes(element.type) || isInline(element);
+  editor.isElementReadOnly = element =>
+    element.type === 'input' || isElementReadOnly(element);
   return editor;
 };
 
 const Element: FC<RenderElementProps> = props => {
   const { attributes, children, element } = props;
   switch (element.type) {
-    case 'button':
-      return <EditableButtonComponent {...props} />;
+    case 'input':
+      return <EditableComponent {...props} />;
     default:
       return <p {...attributes}>{children}</p>;
   }
