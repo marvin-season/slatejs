@@ -1,18 +1,29 @@
-import React, { useMemo } from 'react'
-import { isKeyHotkey } from 'is-hotkey'
-import { css } from '@emotion/css'
+import React, {useMemo} from 'react'
+import {isKeyHotkey} from 'is-hotkey'
+import {css} from '@emotion/css'
 import * as SlateReact from 'slate-react'
-import { Editable, withReact } from 'slate-react'
-import { createEditor, Range, Transforms } from 'slate'
-import { withHistory } from 'slate-history'
+import {Editable, withReact} from 'slate-react'
+import {createEditor, Editor, Range, Transforms} from 'slate'
+import {withHistory} from 'slate-history'
 
 const initialValue = [
     {
         type: 'paragraph',
         children: [
             {
+                text: 'In addition to block nodes, you can create inline nodes. Here is a ',
+            },
+            {
+                text: ', and here is a more unusual inline: an ',
+            },
+            {
                 type: 'button',
-                children: [{ text: 'editable button' }],
+                children: [
+                    {text: 'editable'},
+                ],
+            },
+            {
+                text: '! Here is a read-only inline: ',
             },
         ],
     },
@@ -23,7 +34,8 @@ const InlinesExample = () => {
         []
     )
     const onKeyDown = event => {
-        const { selection } = editor
+        const {selection} = editor;
+
         // Default left/right behavior is unit:'character'.
         // This fails to distinguish between two cursor positions, such as
         // <inline>foo<cursor/></inline> vs <inline>foo</inline><cursor/>.
@@ -33,13 +45,14 @@ const InlinesExample = () => {
         if (selection && Range.isCollapsed(selection)) {
             const { nativeEvent } = event
             if (isKeyHotkey('left', nativeEvent)) {
+                console.log("left", nativeEvent)
                 event.preventDefault()
-                Transforms.move(editor, { unit: 'offset', reverse: true })
+                Transforms.move(editor, {unit: 'offset', reverse: true})
                 return
             }
             if (isKeyHotkey('right', nativeEvent)) {
                 event.preventDefault()
-                Transforms.move(editor, { unit: 'offset' })
+                Transforms.move(editor, {unit: 'offset'})
                 return
             }
         }
@@ -56,7 +69,7 @@ const InlinesExample = () => {
     )
 }
 const withInlines = editor => {
-    const { insertData, insertText, isInline, isElementReadOnly, isSelectable } =
+    const {insertData, insertText, isInline, isElementReadOnly, isSelectable} =
         editor
     editor.isInline = element =>
         ['button'].includes(element.type) || isInline(element)
@@ -69,13 +82,13 @@ const InlineChromiumBugfix = () => (
     <span
         contentEditable={false}
         className={css`
-      font-size: 0;
-    `}
+            font-size: 0;
+        `}
     >
     {String.fromCodePoint(160) /* Non-breaking space */}
   </span>
 )
-const EditableButtonComponent = ({ attributes, children }) => {
+const EditableButtonComponent = ({attributes, children}) => {
     return (
         /*
           Note that this is not a true button, but a span with button-like CSS.
@@ -100,14 +113,14 @@ const EditableButtonComponent = ({ attributes, children }) => {
                 font-size: 0.9em;
             `}
         >
-      <InlineChromiumBugfix />
+      <InlineChromiumBugfix/>
             {children}
-            <InlineChromiumBugfix />
+            <InlineChromiumBugfix/>
     </span>
     )
 }
 const Element = props => {
-    const { attributes, children, element } = props
+    const {attributes, children, element} = props
     switch (element.type) {
         case 'button':
             return <EditableButtonComponent {...props} />
@@ -116,7 +129,7 @@ const Element = props => {
     }
 }
 const Text = props => {
-    const { attributes, children, leaf } = props
+    const {attributes, children, leaf} = props
     return (
         <span
             // The following is a workaround for a Chromium bug where,
@@ -127,8 +140,8 @@ const Text = props => {
             className={
                 leaf.text === ''
                     ? css`
-              padding-left: 0.1px;
-            `
+                            padding-left: 0.1px;
+                    `
                     : null
             }
             {...attributes}
