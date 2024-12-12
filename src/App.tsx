@@ -2,7 +2,7 @@ import React, { FC, useMemo } from 'react';
 import { isKeyHotkey } from 'is-hotkey';
 import { css } from '@emotion/css';
 import * as SlateReact from 'slate-react';
-import { Editable, RenderElementProps, withReact } from 'slate-react';
+import { Editable, ReactEditor, RenderElementProps, withReact } from 'slate-react';
 import { createEditor, Range, Transforms } from 'slate';
 import { withHistory } from 'slate-history';
 import EditableComponent from './components/EditableComponent.tsx';
@@ -58,17 +58,20 @@ const InlinesExample = () => {
     }
   };
   return (
-    <SlateReact.Slate editor={editor} initialValue={initialValue}>
+    <SlateReact.Slate editor={editor} onValueChange={(newValue) => {
+      console.log(newValue);
+    }} initialValue={initialValue}>
       <Editable
         renderElement={props => <Element {...props} />}
         renderLeaf={props => <Text {...props} />}
         placeholder="Enter some text..."
         onKeyDown={onKeyDown}
+
       />
     </SlateReact.Slate>
   );
 };
-const withInlines = (editor: ReturnType<typeof withHistory>) => {
+const withInlines = (editor: ReactEditor) => {
   const { isInline, isElementReadOnly } =
     editor;
   editor.isInline = element =>
