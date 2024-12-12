@@ -1,10 +1,11 @@
 import { css } from '@emotion/css';
 import React, { FC } from 'react';
-import { RenderElementProps, useSlate } from 'slate-react';
+import { RenderElementProps, useSelected, useSlate } from 'slate-react';
 import { Transforms } from 'slate';
 
-const EditableComponent: FC<RenderElementProps> = ({ attributes, children }) => {
+const EditableComponent: FC<RenderElementProps> = ({ attributes, element, children }) => {
   const editor = useSlate();
+  const selected = useSelected();
 
   const handleSelect = () => {
     Transforms.select(editor, editor.selection!);
