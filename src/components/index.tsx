@@ -1,12 +1,13 @@
 import React, { FC } from 'react';
 import { RenderElementProps } from 'slate-react';
 import EditableComponent from './EditableComponent.tsx';
+import InputComponents from './InputComponents.tsx';
 
 export const Element: FC<RenderElementProps> = props => {
   const { attributes, children, element } = props;
   switch (element.type) {
     case 'input':
-      return <EditableComponent {...props} />;
+      return <InputComponents {...props} />;
     default:
       return <p {...attributes}>{children}</p>;
   }

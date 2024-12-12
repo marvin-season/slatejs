@@ -19,6 +19,7 @@ const initialValue = [
       {
         type: 'input',
         placeholder: 'placeholder',
+        value: 'hello',
         children: [
           { text: '' },
         ],
