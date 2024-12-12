@@ -18,9 +18,9 @@ const initialValue = [
       },
       {
         type: 'input',
+        placeholder: 'placeholder',
         children: [
-          { text: 'value' },
-          { text: 'placeholder' },
+          { text: '' },
         ],
       },
       {
@@ -97,7 +97,7 @@ const InlinesExample = () => {
 
   return (
     <SlateReact.Slate editor={editor} onValueChange={(newValue) => {
-      console.log(newValue);
+      console.log(Array.from(Editor.nodes(editor, {match: n => n.type == 'input'})));
     }} initialValue={initialValue}>
       <Editable
         renderElement={props => <Element {...props} />}
