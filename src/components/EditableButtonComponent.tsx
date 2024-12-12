@@ -1,7 +1,8 @@
 import { css } from '@emotion/css';
-import React from 'react';
+import React, { FC } from 'react';
+import { RenderElementProps } from 'slate-react';
 
-const EditableButtonComponent = ({ attributes, children }) => {
+const EditableButtonComponent: FC<RenderElementProps> = ({ attributes, children }) => {
   return (
     /*
       Note that this is not a true button, but a span with button-like CSS.
@@ -18,12 +19,9 @@ const EditableButtonComponent = ({ attributes, children }) => {
       // Margin is necessary to clearly show the cursor adjacent to the button
       className={css`
           margin: 0 0.1em;
-
           background-color: #efefef;
           padding: 2px 6px;
-          border: 1px solid #767676;
-          border-radius: 2px;
-          font-size: 0.9em;
+          border-radius: 4px;
       `}
     >
       <InlineChromiumBugfix />
