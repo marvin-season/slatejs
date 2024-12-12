@@ -1,8 +1,15 @@
 import { css } from '@emotion/css';
 import React, { FC } from 'react';
-import { RenderElementProps } from 'slate-react';
+import { RenderElementProps, useSlate } from 'slate-react';
+import { Transforms } from 'slate';
 
 const EditableComponent: FC<RenderElementProps> = ({ attributes, children }) => {
+  const editor = useSlate();
+
+  const handleSelect = () => {
+    Transforms.select(editor, editor.selection!);
+  };
+
   return (
     /*
       Note that this is not a true button, but a span with button-like CSS.
@@ -15,7 +22,10 @@ const EditableComponent: FC<RenderElementProps> = ({ attributes, children }) => 
     */
     <span
       {...attributes}
-      onClick={ev => ev.preventDefault()}
+      onClick={ev => {
+        ev.preventDefault();
+        handleSelect();
+      }}
       // Margin is necessary to clearly show the cursor adjacent to the button
       className={css`
           margin: 0 0.1em;
@@ -23,6 +33,7 @@ const EditableComponent: FC<RenderElementProps> = ({ attributes, children }) => 
           padding: 2px 6px;
           border-radius: 4px;
       `}
+
     >
       <InlineChromiumBugfix />
       {children}

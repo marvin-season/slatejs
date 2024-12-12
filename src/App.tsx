@@ -1,11 +1,10 @@
 import React, { FC, useMemo } from 'react';
 import { isKeyHotkey } from 'is-hotkey';
-import { css } from '@emotion/css';
 import * as SlateReact from 'slate-react';
 import { Editable, ReactEditor, RenderElementProps, withReact } from 'slate-react';
-import { createEditor, Range, Transforms } from 'slate';
+import { createEditor, Editor, Range, Transforms } from 'slate';
 import { withHistory } from 'slate-history';
-import EditableComponent from './components/EditableComponent.tsx';
+import { Element, Text } from './components';
 
 const initialValue = [
   {
@@ -45,6 +44,13 @@ const InlinesExample = () => {
     // You may wish to customize this further to only use unit:'offset' in specific cases.
     if (selection && Range.isCollapsed(selection)) {
       const { nativeEvent } = event;
+      const [node] = Array.from(
+        Editor.nodes(editor, { match: (n) => n.type === 'input' }),
+      );
+
+      if (node) {
+
+      }
       if (isKeyHotkey('left', nativeEvent)) {
         event.preventDefault();
         Transforms.move(editor, { unit: 'offset', reverse: true });
@@ -76,40 +82,7 @@ const withInlines = (editor: ReactEditor) => {
     editor;
   editor.isInline = element =>
     ['input'].includes(element.type) || isInline(element);
-  editor.isElementReadOnly = element =>
-    element.type === 'input' || isElementReadOnly(element);
   return editor;
 };
 
-const Element: FC<RenderElementProps> = props => {
-  const { attributes, children, element } = props;
-  switch (element.type) {
-    case 'input':
-      return <EditableComponent {...props} />;
-    default:
-      return <p {...attributes}>{children}</p>;
-  }
-};
-const Text: FC<RenderElementProps> = props => {
-  const { attributes, children, leaf } = props;
-  return (
-    <span
-      // The following is a workaround for a Chromium bug where,
-      // if you have an inline at the end of a block,
-      // clicking the end of a block puts the cursor inside the inline
-      // instead of inside the final {text: ''} node
-      // https://github.com/ianstormtaylor/slate/issues/4704#issuecomment-1006696364
-      className={
-        leaf.text === ''
-          ? css`
-                    padding-left: 0.1px;
-          `
-          : null
-      }
-      {...attributes}
-    >
-      {children}
-    </span>
-  );
-};
 export default InlinesExample;
