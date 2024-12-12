@@ -19,7 +19,8 @@ const initialValue = [
       {
         type: 'input',
         children: [
-          { text: 'editable' },
+          { text: 'value' },
+          { text: 'placeholder' },
         ],
       },
       {

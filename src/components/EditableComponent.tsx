@@ -1,16 +1,19 @@
 import { css } from '@emotion/css';
-import React, { FC } from 'react';
-import { RenderElementProps, useSelected, useSlate } from 'slate-react';
-import { Transforms } from 'slate';
+import React, { FC, useMemo } from 'react';
+import { RenderElementProps, useSelected } from 'slate-react';
 
 const EditableComponent: FC<RenderElementProps> = ({ attributes, element, children }) => {
-  const editor = useSlate();
   const selected = useSelected();
 
-  const handleSelect = () => {
-    Transforms.select(editor, editor.selection!);
-  };
+// 判断输入框是否为空
+  const isEmpty = element.children.length === 1 && element.children[0].text === '';
+  const isPlaceholder = useMemo(() => {
 
+    console.log(selected, isEmpty);
+    return !selected && isEmpty;
+  }, [selected, isEmpty]);
+
+  console.log('isPlaceholder', isPlaceholder);
   return (
     /*
       Note that this is not a true button, but a span with button-like CSS.
@@ -25,7 +28,6 @@ const EditableComponent: FC<RenderElementProps> = ({ attributes, element, childr
       {...attributes}
       onClick={ev => {
         ev.preventDefault();
-        handleSelect();
       }}
       // Margin is necessary to clearly show the cursor adjacent to the button
       className={css`
@@ -37,7 +39,7 @@ const EditableComponent: FC<RenderElementProps> = ({ attributes, element, childr
 
     >
       <InlineChromiumBugfix />
-      {children}
+      {isPlaceholder ? children[1] : children[0]}
       <InlineChromiumBugfix />
     </span>
   );
