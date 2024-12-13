@@ -5,47 +5,16 @@ import { Editable, ReactEditor, withReact } from 'slate-react';
 import { createEditor, Range, Transforms } from 'slate';
 import { withHistory } from 'slate-history';
 import { Element, Text } from './components';
-import { serializeToPlainText } from './utils';
+import { deserializeFromPlainText, serializeToPlainText } from './utils';
 
+const str = '我是 {{ name }}, 我目前的工作是 {{work}}';
+let nodes = deserializeFromPlainText(str);
+console.log(nodes);
 const initialValue = [
   {
     type: 'paragraph',
-    children: [
-      {
-        text: ', and here is a more unusual inline: an ',
-      },
-      {
-        type: 'input',
-        placeholder: 'placeholder 1',
-        value: 'hello',
-        children: [
-          { text: '' },
-        ],
-      },
-      {
-        text: '! Here is a read-only inline: ',
-      },
-    ],
-  },
-  {
-    type: 'paragraph',
-    children: [
-      {
-        text: ', and here is a more unusual inline: an ',
-      },
-      {
-        type: 'input',
-        placeholder: 'placeholder 2',
-        value: 'hello',
-        children: [
-          { text: '' },
-        ],
-      },
-      {
-        text: '! Here is a read-only inline: ',
-      },
-    ],
-  },
+    children: nodes
+  }
 ];
 
 const withInlines = (editor: ReactEditor) => {
