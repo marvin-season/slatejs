@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useRef } from 'react';
 import { ReactEditor } from 'slate-react';
 import { Editor } from 'slate';
 import { 
@@ -16,6 +16,21 @@ interface ContextMenuProps {
 }
 
 export const ContextMenu: React.FC<ContextMenuProps> = ({ position, onClose, editor }) => {
+  const menuRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (menuRef.current && !menuRef.current.contains(event.target as Node)) {
+        onClose();
+      }
+    };
+
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, [onClose]);
+
   if (!position) return null;
 
   const menuItemStyle = {
@@ -31,6 +46,7 @@ export const ContextMenu: React.FC<ContextMenuProps> = ({ position, onClose, edi
 
   return (
     <div
+      ref={menuRef}
       style={{
         position: 'fixed',
         top: position.y,
