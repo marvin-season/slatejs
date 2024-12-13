@@ -66,13 +66,29 @@ export const CustomEditor: React.FC<CustomEditorProps> = ({ editor, onContextMen
   };
 
   return (
-    <Editable
-      style={{ height: '100px', overflow: 'hidden', padding: '10px' }}
-      renderElement={props => <Element {...props} />}
-      renderLeaf={props => <Leaf {...props} />}
-      placeholder="Enter some text..."
-      onKeyDown={onKeyDown}
-      onContextMenu={onContextMenu}
-    />
+    <div className="editor-container" style={{
+      maxWidth: '900px',
+      margin: '0 auto',
+      padding: '20px',
+      backgroundColor: '#ffffff',
+      borderRadius: '8px',
+      boxShadow: '0 2px 8px rgba(0, 0, 0, 0.1)',
+    }}>
+      <Editable
+        style={{
+          minHeight: '300px',
+          padding: '20px',
+          fontSize: '16px',
+          lineHeight: '1.6',
+          color: '#2d3748',
+          outline: 'none',
+        }}
+        renderElement={props => <Element {...props} />}
+        renderLeaf={props => <Leaf {...props} />}
+        placeholder="Type '/' for commands..."
+        onKeyDown={onKeyDown}
+        onContextMenu={onContextMenu}
+      />
+    </div>
   );
 };
