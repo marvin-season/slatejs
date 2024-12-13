@@ -11,9 +11,6 @@ const initialValue = [
     type: 'paragraph',
     children: [
       {
-        text: 'In addition to block nodes, you can create inline nodes. Here is a ',
-      },
-      {
         text: ', and here is a more unusual inline: an ',
       },
       {
@@ -98,7 +95,7 @@ const InlinesExample = () => {
 
   return (
     <SlateReact.Slate editor={editor} onValueChange={(newValue) => {
-      console.log(Array.from(Editor.nodes(editor, {match: n => n.type == 'input'})));
+      console.log(JSON.stringify(newValue, null, 2));
     }} initialValue={initialValue}>
       <Editable
         renderElement={props => <Element {...props} />}

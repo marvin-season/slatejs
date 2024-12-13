@@ -8,7 +8,7 @@ import Demo from './pages/Demo.tsx';
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
-    {/*<App />*/}
-    <Demo/>
+    <App />
+    {/*<Demo/>*/}
   </StrictMode>,
 )
