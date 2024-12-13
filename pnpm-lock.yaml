@@ -11,6 +11,9 @@ importers:
       '@emotion/css':
         specifier: ^11.13.5
         version: 11.13.5
+      '@types/is-hotkey':
+        specifier: ^0.1.10
+        version: 0.1.10
       is-hotkey:
         specifier: ^0.2.0
         version: 0.2.0
@@ -536,6 +539,9 @@ packages:
 
   '@types/estree@1.0.6':
     resolution: {integrity: sha512-AYnb1nQyY49te+VRAVgmzfcgjYS91mY5P0TKUDCLEM+gNnA+3T6rWITXRLYCpahpqSQbN5cE+gHpnPyXjHWxcw==}
+
+  '@types/is-hotkey@0.1.10':
+    resolution: {integrity: sha512-RvC8KMw5BCac1NvRRyaHgMMEtBaZ6wh0pyPTBu7izn4Sj/AX9Y4aXU5c7rX8PnM/knsuUpC1IeoBkANtxBypsQ==}
 
   '@types/json-schema@7.0.15':
     resolution: {integrity: sha512-5+fP8P8MFNC+AyZCDxrB2pkZFPGzqQWUzpSeuuVLvm8VMcorNYavBqoFcxK8bQz4Qsbn4oUEEem4wDLfcysGHA==}
@@ -1665,6 +1671,8 @@ snapshots:
       '@babel/types': 7.26.3
 
   '@types/estree@1.0.6': {}
+
+  '@types/is-hotkey@0.1.10': {}
 
   '@types/json-schema@7.0.15': {}
 
