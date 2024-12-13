@@ -30,7 +30,7 @@ const initialValue = [
 ];
 
 const withInlines = (editor: ReactEditor) => {
-  const { isInline, isElementReadOnly } =
+  const { isInline } =
     editor;
   editor.isInline = element =>
     ['input'].includes(element.type) || isInline(element);
@@ -44,7 +44,7 @@ const InlinesExample = () => {
     [],
   );
 
-  const onKeyDown = event => {
+  const onKeyDown = (event: any) => {
     const { selection } = editor;
 
     if (selection && Range.isCollapsed(selection)) {
