@@ -20,7 +20,12 @@ const withInlines = (editor: ReactEditor) => {
 
 const InlinesExample = () => {
   const [input, setInput] = useState(str);
-  const [value, setValue] = useState<Descendant[]>([]);
+  const [value, setValue] = useState<Descendant[]>([
+    {
+      type: 'paragraph',
+      children: [{ text: '' }],
+    },
+  ]);
   const [result, setResult] = useState('');
   const editor = useMemo(
     () => withInlines(withHistory(withReact(createEditor()))),
@@ -50,6 +55,7 @@ const InlinesExample = () => {
 
       <SlateReact.Slate key={JSON.stringify(value)} editor={editor} initialValue={value}>
         <Editable
+          style={{ height: '100px', overflow: 'hidden', padding: '10px' }}
           renderElement={props => <Element {...props} />}
           renderLeaf={props => <Text {...props} />}
           placeholder="Enter some text..."
@@ -60,11 +66,11 @@ const InlinesExample = () => {
 
 
       <div style={{ display: 'flex' }}>
-        <textarea value={input} onChange={(event) => {
+        <textarea style={{ height: '400px' }} value={input} onChange={(event) => {
           setInput(event.target.value);
         }} />
-        <code>
-          <pre>{JSON.stringify(value, null, 2)}</pre>
+        <code style={{ height: '400px', overflowY: 'auto' }}>
+          <pre>{JSON.stringify(editor.children, null, 2)}</pre>
         </code>
         <code>
           <pre>{result}</pre>
@@ -85,7 +91,7 @@ const InlinesExample = () => {
       <button onClick={() => {
         const plainText = serializeToPlainText(editor.children);
         setResult(plainText);
-      }}>查看修改结果
+      }}>查看结果
       </button>
     </>
 
