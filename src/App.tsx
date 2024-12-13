@@ -1,21 +1,13 @@
-import React, { useMemo } from 'react';
+import React, { useMemo, useState } from 'react';
 import { isKeyHotkey } from 'is-hotkey';
 import * as SlateReact from 'slate-react';
 import { Editable, ReactEditor, withReact } from 'slate-react';
-import { createEditor, Range, Transforms } from 'slate';
+import { createEditor, Descendant, Range, Transforms } from 'slate';
 import { withHistory } from 'slate-history';
 import { Element, Text } from './components';
 import { deserializeFromPlainText, serializeToPlainText } from './utils';
 
 const str = '我是 {{ name }}, 我目前的工作是 {{work}}';
-let nodes = deserializeFromPlainText(str);
-console.log(nodes);
-const initialValue = [
-  {
-    type: 'paragraph',
-    children: nodes
-  }
-];
 
 const withInlines = (editor: ReactEditor) => {
   const { isInline } =
@@ -27,6 +19,9 @@ const withInlines = (editor: ReactEditor) => {
 
 
 const InlinesExample = () => {
+  const [input, setInput] = useState(str);
+  const [value, setValue] = useState<Descendant[]>([]);
+  const [result, setResult] = useState('');
   const editor = useMemo(
     () => withInlines(withHistory(withReact(createEditor()))),
     [],
@@ -52,12 +47,8 @@ const InlinesExample = () => {
 
   return (
     <>
-      <button onClick={() => {
-        const plainText = serializeToPlainText(editor.children);
-        console.log(plainText);
-      }}>查看结果
-      </button>
-      <SlateReact.Slate editor={editor} initialValue={initialValue}>
+
+      <SlateReact.Slate key={JSON.stringify(value)} editor={editor} initialValue={value}>
         <Editable
           renderElement={props => <Element {...props} />}
           renderLeaf={props => <Text {...props} />}
@@ -66,6 +57,36 @@ const InlinesExample = () => {
 
         />
       </SlateReact.Slate>
+
+
+      <div style={{ display: 'flex' }}>
+        <textarea value={input} onChange={(event) => {
+          setInput(event.target.value);
+        }} />
+        <code>
+          <pre>{JSON.stringify(value, null, 2)}</pre>
+        </code>
+        <code>
+          <pre>{result}</pre>
+        </code>
+      </div>
+      <button onClick={() => {
+        try {
+          setValue([
+            {
+              type: 'paragraph',
+              children: deserializeFromPlainText(input),
+            },
+          ]);
+        } catch (e) {
+        }
+      }}>转换
+      </button>
+      <button onClick={() => {
+        const plainText = serializeToPlainText(editor.children);
+        setResult(plainText);
+      }}>查看修改结果
+      </button>
     </>
 
   );

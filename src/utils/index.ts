@@ -55,7 +55,9 @@ export const deserializeFromPlainText = (str: string) => {
       text: str.slice(lastIndex),
     });
   }
-
+  result.push({
+    text: '',
+  });
   return result;
 };
 
