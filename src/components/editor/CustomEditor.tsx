@@ -4,7 +4,12 @@ import { Range } from 'slate';
 import { isKeyHotkey } from 'is-hotkey';
 import { Leaf } from './Leaf';
 import { Element } from '../index';
-import { toggleBoldMark, toggleItalicMark } from './EditorCommands';
+import { 
+  toggleBoldMark, 
+  toggleItalicMark, 
+  toggleUnderlineMark, 
+  toggleStrikethroughMark 
+} from './EditorCommands';
 import { ReactEditor } from 'slate-react';
 import { Transforms } from 'slate';
 
@@ -28,6 +33,20 @@ export const CustomEditor: React.FC<CustomEditorProps> = ({ editor, onContextMen
     if (event.ctrlKey && event.key === 'i') {
       event.preventDefault();
       toggleItalicMark(editor);
+      return;
+    }
+
+    // Handle Ctrl+U for underline
+    if (event.ctrlKey && event.key === 'u') {
+      event.preventDefault();
+      toggleUnderlineMark(editor);
+      return;
+    }
+
+    // Handle Ctrl+D for strikethrough (del)
+    if (event.ctrlKey && event.key === 'd') {
+      event.preventDefault();
+      toggleStrikethroughMark(editor);
       return;
     }
 
