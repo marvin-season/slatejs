@@ -16,7 +16,26 @@ const initialValue = [
       },
       {
         type: 'input',
-        placeholder: 'placeholder',
+        placeholder: 'placeholder 1',
+        value: 'hello',
+        children: [
+          { text: '' },
+        ],
+      },
+      {
+        text: '! Here is a read-only inline: ',
+      },
+    ],
+  },
+  {
+    type: 'paragraph',
+    children: [
+      {
+        text: ', and here is a more unusual inline: an ',
+      },
+      {
+        type: 'input',
+        placeholder: 'placeholder 2',
         value: 'hello',
         children: [
           { text: '' },
