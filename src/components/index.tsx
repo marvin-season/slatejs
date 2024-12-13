@@ -2,15 +2,29 @@ import React, { FC } from 'react';
 import { RenderElementProps } from 'slate-react';
 import InputComponents from './InputComponents.tsx';
 
+interface CustomElement {
+  type: string;
+  children: any[];
+}
+
 export const Element: FC<RenderElementProps> = props => {
   const { attributes, children, element } = props;
-  switch (element.type) {
+  const customElement = element as CustomElement;
+
+  switch (customElement.type) {
     case 'input':
       return <InputComponents {...props} />;
+    case 'heading-one':
+      return <h1 {...attributes} style={{ fontSize: '2em', marginBottom: '0.5em' }}>{children}</h1>;
+    case 'heading-two':
+      return <h2 {...attributes} style={{ fontSize: '1.5em', marginBottom: '0.5em' }}>{children}</h2>;
+    case 'paragraph':
+      return <p {...attributes} style={{ marginBottom: '1em' }}>{children}</p>;
     default:
       return <p {...attributes}>{children}</p>;
   }
 };
+
 export const Text: FC<RenderElementProps> = props => {
   const { attributes, children, leaf } = props;
   return (

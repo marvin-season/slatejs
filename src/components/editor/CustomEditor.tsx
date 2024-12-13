@@ -1,6 +1,6 @@
-import React from 'react';
+import React, { useState, useCallback, useEffect } from 'react';
 import { Editable } from 'slate-react';
-import { Range } from 'slate';
+import { Range, Editor, Point } from 'slate';
 import { isKeyHotkey } from 'is-hotkey';
 import { Leaf } from './Leaf';
 import { Element } from '../index';
@@ -12,6 +12,7 @@ import {
 } from './EditorCommands';
 import { ReactEditor } from 'slate-react';
 import { Transforms } from 'slate';
+import { CommandMenu } from './CommandMenu';
 
 interface CustomEditorProps {
   editor: ReactEditor;
@@ -19,38 +20,53 @@ interface CustomEditorProps {
 }
 
 export const CustomEditor: React.FC<CustomEditorProps> = ({ editor, onContextMenu }) => {
-  const onKeyDown = (event: React.KeyboardEvent) => {
-    const { selection } = editor;
+  const [targetRange, setTargetRange] = useState<Range | null>(null);
 
-    // Handle Ctrl+B for bold
-    if (event.ctrlKey && event.key === 'b') {
+  const handleKeyDown = (event: React.KeyboardEvent) => {
+    if (event.key === '/' && !event.shiftKey) {
+      const { selection } = editor;
+      if (selection && Range.isCollapsed(selection)) {
+        event.preventDefault();
+        setTargetRange(selection);
+        return;
+      }
+    }
+
+    // Handle shortcuts
+    if (event.ctrlKey || event.metaKey) {
+      switch (event.key) {
+        case 'b': {
+          event.preventDefault();
+          toggleBoldMark(editor);
+          return;
+        }
+        case 'i': {
+          event.preventDefault();
+          toggleItalicMark(editor);
+          return;
+        }
+        case 'u': {
+          event.preventDefault();
+          toggleUnderlineMark(editor);
+          return;
+        }
+        case 'd': {
+          event.preventDefault();
+          toggleStrikethroughMark(editor);
+          return;
+        }
+      }
+    }
+
+    // Handle Escape
+    if (event.key === 'Escape' && targetRange) {
       event.preventDefault();
-      toggleBoldMark(editor);
+      setTargetRange(null);
       return;
     }
 
-    // Handle Ctrl+I for italic
-    if (event.ctrlKey && event.key === 'i') {
-      event.preventDefault();
-      toggleItalicMark(editor);
-      return;
-    }
-
-    // Handle Ctrl+U for underline
-    if (event.ctrlKey && event.key === 'u') {
-      event.preventDefault();
-      toggleUnderlineMark(editor);
-      return;
-    }
-
-    // Handle Ctrl+D for strikethrough (del)
-    if (event.ctrlKey && event.key === 'd') {
-      event.preventDefault();
-      toggleStrikethroughMark(editor);
-      return;
-    }
-
-    if (selection && Range.isCollapsed(selection)) {
+    // Handle arrow keys
+    if (event.selection && Range.isCollapsed(event.selection)) {
       const { nativeEvent } = event;
       if (isKeyHotkey('left', nativeEvent)) {
         event.preventDefault();
@@ -65,6 +81,33 @@ export const CustomEditor: React.FC<CustomEditorProps> = ({ editor, onContextMen
     }
   };
 
+  const handleDOMBeforeInput = useCallback((e: InputEvent) => {
+    queueMicrotask(() => {
+      const pendingDiffs = ReactEditor.androidPendingDiffs(editor);
+      const scheduleFlush = pendingDiffs?.some(
+        ({ diff, path }) => diff.text === '/' && diff.start === 0
+      );
+
+      if (scheduleFlush) {
+        const { selection } = editor;
+        if (selection && Range.isCollapsed(selection)) {
+          setTargetRange(selection);
+        }
+      }
+    });
+  }, [editor]);
+
+  useEffect(() => {
+    const handleClick = (e: MouseEvent) => {
+      if (targetRange && !e.defaultPrevented) {
+        setTargetRange(null);
+      }
+    };
+
+    document.addEventListener('click', handleClick);
+    return () => document.removeEventListener('click', handleClick);
+  }, [targetRange]);
+
   return (
     <div className="editor-container" style={{
       maxWidth: '900px',
@@ -73,6 +116,7 @@ export const CustomEditor: React.FC<CustomEditorProps> = ({ editor, onContextMen
       backgroundColor: '#ffffff',
       borderRadius: '8px',
       boxShadow: '0 2px 8px rgba(0, 0, 0, 0.1)',
+      position: 'relative',
     }}>
       <Editable
         style={{
@@ -85,9 +129,17 @@ export const CustomEditor: React.FC<CustomEditorProps> = ({ editor, onContextMen
         renderElement={props => <Element {...props} />}
         renderLeaf={props => <Leaf {...props} />}
         placeholder="Type '/' for commands..."
-        onKeyDown={onKeyDown}
+        onKeyDown={handleKeyDown}
+        onDOMBeforeInput={handleDOMBeforeInput}
         onContextMenu={onContextMenu}
       />
+      {targetRange && (
+        <CommandMenu
+          editor={editor}
+          targetRange={targetRange}
+          onClose={() => setTargetRange(null)}
+        />
+      )}
     </div>
   );
 };
