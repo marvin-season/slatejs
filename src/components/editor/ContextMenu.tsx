@@ -1,6 +1,7 @@
 import React from 'react';
 import { ReactEditor } from 'slate-react';
 import { Editor } from 'slate';
+import { toggleBoldMark, isMarkActive } from './EditorCommands';
 
 interface ContextMenuProps {
   position: { x: number; y: number } | null;
@@ -10,6 +11,17 @@ interface ContextMenuProps {
 
 export const ContextMenu: React.FC<ContextMenuProps> = ({ position, onClose, editor }) => {
   if (!position) return null;
+
+  const menuItemStyle = {
+    cursor: 'pointer',
+    padding: '4px 8px',
+    display: 'flex',
+    alignItems: 'center',
+    gap: '8px',
+    ':hover': {
+      backgroundColor: '#f5f5f5'
+    }
+  };
 
   return (
     <div
@@ -26,7 +38,18 @@ export const ContextMenu: React.FC<ContextMenuProps> = ({ position, onClose, edi
       }}
     >
       <div
-        style={{ cursor: 'pointer', padding: '4px 8px' }}
+        style={menuItemStyle}
+        onClick={() => {
+          toggleBoldMark(editor);
+          onClose();
+        }}
+      >
+        <span style={{ fontWeight: 'bold' }}>B</span>
+        Bold
+        {isMarkActive(editor, 'bold') && <span style={{ marginLeft: 'auto', fontSize: '12px' }}>⌘B</span>}
+      </div>
+      <div
+        style={menuItemStyle}
         onClick={() => {
           editor.insertText('Custom text');
           onClose();
@@ -35,7 +58,7 @@ export const ContextMenu: React.FC<ContextMenuProps> = ({ position, onClose, edi
         Insert Text
       </div>
       <div
-        style={{ cursor: 'pointer', padding: '4px 8px' }}
+        style={menuItemStyle}
         onClick={() => {
           const selection = editor.selection;
           if (selection) {

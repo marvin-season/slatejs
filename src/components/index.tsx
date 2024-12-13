@@ -1,6 +1,5 @@
 import React, { FC } from 'react';
 import { RenderElementProps } from 'slate-react';
-import EditableComponent from './EditableComponent.tsx';
 import InputComponents from './InputComponents.tsx';
 
 export const Element: FC<RenderElementProps> = props => {
