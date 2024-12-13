@@ -2,7 +2,7 @@ import React, { useMemo, useState } from 'react';
 import { isKeyHotkey } from 'is-hotkey';
 import * as SlateReact from 'slate-react';
 import { Editable, ReactEditor, withReact } from 'slate-react';
-import { createEditor, Descendant, Range, Transforms } from 'slate';
+import { createEditor, Descendant, Range, Transforms, Node } from 'slate';
 import { withHistory } from 'slate-history';
 import { Element, Text } from './components';
 import { deserializeFromPlainText, serializeToPlainText } from './utils';
@@ -27,6 +27,8 @@ const InlinesExample = () => {
     },
   ]);
   const [result, setResult] = useState('');
+  const [contextMenu, setContextMenu] = useState<{ x: number; y: number } | null>(null);
+  
   const editor = useMemo(
     () => withInlines(withHistory(withReact(createEditor()))),
     [],
@@ -50,9 +52,14 @@ const InlinesExample = () => {
     }
   };
 
+  const handleContextMenu = (event: React.MouseEvent) => {
+    event.preventDefault();
+    const { pageX, pageY } = event;
+    setContextMenu({ x: pageX, y: pageY });
+  };
+
   return (
     <>
-
       <SlateReact.Slate key={JSON.stringify(value)} editor={editor} initialValue={value}>
         <Editable
           style={{ height: '100px', overflow: 'hidden', padding: '10px' }}
@@ -60,11 +67,50 @@ const InlinesExample = () => {
           renderLeaf={props => <Text {...props} />}
           placeholder="Enter some text..."
           onKeyDown={onKeyDown}
-
+          onContextMenu={handleContextMenu}
         />
+        {contextMenu && (
+          <div
+            style={{
+              position: 'fixed',
+              top: contextMenu.y,
+              left: contextMenu.x,
+              backgroundColor: 'white',
+              border: '1px solid #ccc',
+              borderRadius: '4px',
+              padding: '8px',
+              boxShadow: '0 2px 5px rgba(0,0,0,0.2)',
+              zIndex: 1000,
+            }}
+          >
+            <div
+              style={{ cursor: 'pointer', padding: '4px 8px' }}
+              onClick={() => {
+                // Add your context menu actions here
+                editor.insertText('Custom text');
+                setContextMenu(null);
+              }}
+            >
+              Insert Text
+            </div>
+            <div
+              style={{ cursor: 'pointer', padding: '4px 8px' }}
+              onClick={() => {
+                // Add copy functionality
+                const selection = editor.selection;
+                if (selection) {
+                  const fragment = editor.getFragment();
+                  const string = fragment.map(node => Node.string(node)).join('\n');
+                  navigator.clipboard.writeText(string);
+                }
+                setContextMenu(null);
+              }}
+            >
+              Copy
+            </div>
+          </div>
+        )}
       </SlateReact.Slate>
-
-
       <div style={{ display: 'flex' }}>
         <textarea style={{ height: '400px' }} value={input} onChange={(event) => {
           setInput(event.target.value);
@@ -94,7 +140,6 @@ const InlinesExample = () => {
       }}>查看结果
       </button>
     </>
-
   );
 };
 
