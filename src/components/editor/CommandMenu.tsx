@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { Range, Editor, Transforms, Element } from 'slate';
 import { ReactEditor } from 'slate-react';
 
@@ -19,6 +19,8 @@ export const CommandMenu: React.FC<CommandMenuProps> = ({
   targetRange,
   onClose,
 }) => {
+  const [selectedIndex, setSelectedIndex] = useState(0);
+
   if (!targetRange) return null;
 
   const domRange = ReactEditor.toDOMRange(editor, targetRange);
@@ -85,6 +87,28 @@ export const CommandMenu: React.FC<CommandMenuProps> = ({
     },
   ];
 
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'ArrowDown') {
+        e.preventDefault();
+        setSelectedIndex((current) => 
+          current === commands.length - 1 ? 0 : current + 1
+        );
+      } else if (e.key === 'ArrowUp') {
+        e.preventDefault();
+        setSelectedIndex((current) => 
+          current === 0 ? commands.length - 1 : current - 1
+        );
+      } else if (e.key === 'Enter') {
+        e.preventDefault();
+        commands[selectedIndex].action();
+      }
+    };
+
+    document.addEventListener('keydown', handleKeyDown);
+    return () => document.removeEventListener('keydown', handleKeyDown);
+  }, [commands, selectedIndex]);
+
   return (
     <div
       style={{
@@ -113,11 +137,13 @@ export const CommandMenu: React.FC<CommandMenuProps> = ({
             borderRadius: '4px',
             fontSize: '14px',
             color: '#4a5568',
-            transition: 'background-color 0.2s',
+            backgroundColor: i === selectedIndex ? '#edf2f7' : 'transparent',
+            transition: 'all 0.2s',
             ':hover': {
               backgroundColor: '#f7fafc',
             },
           }}
+          onMouseEnter={() => setSelectedIndex(i)}
         >
           <span style={{ 
             width: '24px', 
@@ -125,9 +151,10 @@ export const CommandMenu: React.FC<CommandMenuProps> = ({
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
-            backgroundColor: '#f7fafc',
+            backgroundColor: i === selectedIndex ? '#e2e8f0' : '#f7fafc',
             borderRadius: '4px',
             fontSize: command.icon.length > 2 ? '12px' : '16px',
+            transition: 'all 0.2s',
           }}>
             {command.icon}
           </span>
