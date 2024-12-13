@@ -7,7 +7,14 @@ const InputComponents: FC<RenderElementProps> = ({ attributes, element, children
   const editor = useSlateStatic();
   return <>
     <span {...attributes} contentEditable={false}>
-      <input value={value} placeholder={element.placeholder} onChange={(e) => {
+      <input
+        style={{
+          border: '1px solid black',
+          borderRadius: '8px',
+          padding: '4px'
+        }}
+        value={value}
+        placeholder={element.placeholder} onChange={(e) => {
         const v = e.target.value;
         setValue(v);
         const path = ReactEditor.findPath(editor, element);
