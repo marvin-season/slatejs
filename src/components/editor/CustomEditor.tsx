@@ -69,7 +69,7 @@ export const CustomEditor: React.FC<CustomEditorProps> = ({ editor, onContextMen
     <div className="editor-container" style={{
       maxWidth: '900px',
       margin: '0 auto',
-      padding: '20px',
+      padding: '30px 40px',
       backgroundColor: '#ffffff',
       borderRadius: '8px',
       boxShadow: '0 2px 8px rgba(0, 0, 0, 0.1)',
@@ -77,7 +77,6 @@ export const CustomEditor: React.FC<CustomEditorProps> = ({ editor, onContextMen
       <Editable
         style={{
           minHeight: '300px',
-          padding: '20px',
           fontSize: '16px',
           lineHeight: '1.6',
           color: '#2d3748',
