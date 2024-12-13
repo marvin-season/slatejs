@@ -10,6 +10,15 @@ export const toggleBoldMark = (editor: ReactEditor) => {
   );
 };
 
+export const toggleItalicMark = (editor: ReactEditor) => {
+  const isActive = isMarkActive(editor, 'italic');
+  Transforms.setNodes(
+    editor,
+    { italic: !isActive },
+    { match: n => Text.isText(n), split: true }
+  );
+};
+
 export const isMarkActive = (editor: ReactEditor, format: string) => {
   const marks = Editor.marks(editor);
   return marks ? marks[format] === true : false;

@@ -4,7 +4,7 @@ import { Range } from 'slate';
 import { isKeyHotkey } from 'is-hotkey';
 import { Leaf } from './Leaf';
 import { Element } from '../index';
-import { toggleBoldMark } from './EditorCommands';
+import { toggleBoldMark, toggleItalicMark } from './EditorCommands';
 import { ReactEditor } from 'slate-react';
 import { Transforms } from 'slate';
 
@@ -21,6 +21,13 @@ export const CustomEditor: React.FC<CustomEditorProps> = ({ editor, onContextMen
     if (event.ctrlKey && event.key === 'b') {
       event.preventDefault();
       toggleBoldMark(editor);
+      return;
+    }
+
+    // Handle Ctrl+I for italic
+    if (event.ctrlKey && event.key === 'i') {
+      event.preventDefault();
+      toggleItalicMark(editor);
       return;
     }
 

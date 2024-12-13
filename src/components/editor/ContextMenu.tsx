@@ -1,7 +1,7 @@
 import React from 'react';
 import { ReactEditor } from 'slate-react';
 import { Editor } from 'slate';
-import { toggleBoldMark, isMarkActive } from './EditorCommands';
+import { toggleBoldMark, toggleItalicMark, isMarkActive } from './EditorCommands';
 
 interface ContextMenuProps {
   position: { x: number; y: number } | null;
@@ -47,6 +47,17 @@ export const ContextMenu: React.FC<ContextMenuProps> = ({ position, onClose, edi
         <span style={{ fontWeight: 'bold' }}>B</span>
         Bold
         {isMarkActive(editor, 'bold') && <span style={{ marginLeft: 'auto', fontSize: '12px' }}>⌘B</span>}
+      </div>
+      <div
+        style={menuItemStyle}
+        onClick={() => {
+          toggleItalicMark(editor);
+          onClose();
+        }}
+      >
+        <span style={{ fontStyle: 'italic' }}>I</span>
+        Italic
+        {isMarkActive(editor, 'italic') && <span style={{ marginLeft: 'auto', fontSize: '12px' }}>⌘I</span>}
       </div>
       <div
         style={menuItemStyle}
