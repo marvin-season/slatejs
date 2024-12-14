@@ -109,23 +109,9 @@ export const CustomEditor: React.FC<CustomEditorProps> = ({ editor, onContextMen
   }, [targetRange]);
 
   return (
-    <div className="editor-container" style={{
-      maxWidth: '900px',
-      margin: '0 auto',
-      padding: '30px 40px',
-      backgroundColor: '#ffffff',
-      borderRadius: '8px',
-      boxShadow: '0 2px 8px rgba(0, 0, 0, 0.1)',
-      position: 'relative',
-    }}>
+    <div className="max-w-[900px] mx-auto p-8 bg-white rounded-lg shadow-md relative">
       <Editable
-        style={{
-          minHeight: '300px',
-          fontSize: '16px',
-          lineHeight: '1.6',
-          color: '#2d3748',
-          outline: 'none',
-        }}
+        className="min-h-[300px] text-base leading-relaxed text-gray-700 outline-none"
         renderElement={props => <Element {...props} />}
         renderLeaf={props => <Leaf {...props} />}
         placeholder="Type '/' for commands..."

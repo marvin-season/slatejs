@@ -9,36 +9,6 @@ interface InputComponentElement {
   children: any[];
 }
 
-const styles = {
-  container: {
-    display: 'inline-block',
-    margin: '0 2px',
-  },
-  input: {
-    border: '2px solid #e2e8f0',
-    borderRadius: '6px',
-    padding: '4px 8px',
-    fontSize: '14px',
-    lineHeight: '1.4',
-    color: '#2d3748',
-    backgroundColor: '#f7fafc',
-    transition: 'all 0.2s ease',
-    outline: 'none',
-    minWidth: '120px',
-    '::placeholder': {
-      color: '#a0aec0',
-    },
-    ':focus': {
-      borderColor: '#4299e1',
-      backgroundColor: '#fff',
-      boxShadow: '0 0 0 3px rgba(66, 153, 225, 0.1)',
-    },
-    ':hover': {
-      borderColor: '#cbd5e0',
-    }
-  }
-};
-
 const InputComponents: FC<RenderElementProps> = ({ attributes, element, children }) => {
   const typedElement = element as unknown as InputComponentElement;
   const [value, setValue] = useState(typedElement.value);
@@ -60,10 +30,14 @@ const InputComponents: FC<RenderElementProps> = ({ attributes, element, children
     <span
       {...attributes}
       contentEditable={false}
-      style={styles.container}
+      className="inline-block mx-0.5"
     >
       <input
-        style={styles.input}
+        className="border-2 border-gray-200 rounded-md px-2 py-1 text-sm leading-relaxed text-gray-700 bg-gray-50 
+                   transition-all duration-200 outline-none min-w-[120px]
+                   placeholder:text-gray-400
+                   hover:border-gray-300
+                   focus:border-blue-500 focus:bg-white focus:ring-2 focus:ring-blue-100"
         value={value}
         placeholder={typedElement.placeholder}
         onChange={handleChange}

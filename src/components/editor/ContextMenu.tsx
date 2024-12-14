@@ -33,92 +33,96 @@ export const ContextMenu: React.FC<ContextMenuProps> = ({ position, onClose, edi
 
   if (!position) return null;
 
-  const menuItemStyle = {
-    cursor: 'pointer',
-    padding: '8px 12px',
-    display: 'flex',
-    alignItems: 'center',
-    gap: '12px',
-    fontSize: '14px',
-    color: '#4a5568',
-    transition: 'background-color 0.2s',
-    borderRadius: '4px',
-    margin: '2px 0',
-    ':hover': {
-      backgroundColor: '#edf2f7'
-    }
-  };
-
-  const iconStyle = {
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'center',
-    width: '24px',
-    height: '24px',
-    borderRadius: '4px',
-    backgroundColor: '#f7fafc',
-  };
-
-  const shortcutStyle = {
-    marginLeft: 'auto',
-    fontSize: '12px',
-    color: '#718096',
-    padding: '2px 4px',
-    backgroundColor: '#f7fafc',
-    borderRadius: '4px',
-  };
-
   return (
     <div
       ref={menuRef}
+      className="fixed bg-white border border-gray-200 rounded-lg p-1 shadow-lg z-50 min-w-[200px]"
       style={{
-        position: 'fixed',
         top: position.y,
         left: position.x,
-        backgroundColor: '#ffffff',
-        border: '1px solid #e2e8f0',
-        borderRadius: '6px',
-        padding: '4px',
-        boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06)',
-        zIndex: 1000,
-        minWidth: '200px',
       }}
     >
-      <div style={menuItemStyle} onClick={() => { toggleBoldMark(editor); onClose(); }}>
-        <span style={iconStyle}><strong>B</strong></span>
+      <div 
+        className="cursor-pointer px-3 py-2 flex items-center gap-3 text-sm text-gray-600 transition-colors rounded hover:bg-gray-50 my-0.5"
+        onClick={() => { toggleBoldMark(editor); onClose(); }}
+      >
+        <span className="flex items-center justify-center w-6 h-6 rounded bg-gray-50">
+          <strong>B</strong>
+        </span>
         Bold
-        {isMarkActive(editor, 'bold') && <span style={shortcutStyle}>⌘B</span>}
+        {isMarkActive(editor, 'bold') && (
+          <span className="ml-auto text-xs text-gray-500 px-1.5 py-0.5 bg-gray-50 rounded">
+            ⌘B
+          </span>
+        )}
       </div>
-      <div style={menuItemStyle} onClick={() => { toggleItalicMark(editor); onClose(); }}>
-        <span style={iconStyle}><em>I</em></span>
+      <div 
+        className="cursor-pointer px-3 py-2 flex items-center gap-3 text-sm text-gray-600 transition-colors rounded hover:bg-gray-50 my-0.5"
+        onClick={() => { toggleItalicMark(editor); onClose(); }}
+      >
+        <span className="flex items-center justify-center w-6 h-6 rounded bg-gray-50">
+          <em>I</em>
+        </span>
         Italic
-        {isMarkActive(editor, 'italic') && <span style={shortcutStyle}>⌘I</span>}
+        {isMarkActive(editor, 'italic') && (
+          <span className="ml-auto text-xs text-gray-500 px-1.5 py-0.5 bg-gray-50 rounded">
+            ⌘I
+          </span>
+        )}
       </div>
-      <div style={menuItemStyle} onClick={() => { toggleUnderlineMark(editor); onClose(); }}>
-        <span style={iconStyle}><u>U</u></span>
+      <div 
+        className="cursor-pointer px-3 py-2 flex items-center gap-3 text-sm text-gray-600 transition-colors rounded hover:bg-gray-50 my-0.5"
+        onClick={() => { toggleUnderlineMark(editor); onClose(); }}
+      >
+        <span className="flex items-center justify-center w-6 h-6 rounded bg-gray-50">
+          <u>U</u>
+        </span>
         Underline
-        {isMarkActive(editor, 'underline') && <span style={shortcutStyle}>⌘U</span>}
+        {isMarkActive(editor, 'underline') && (
+          <span className="ml-auto text-xs text-gray-500 px-1.5 py-0.5 bg-gray-50 rounded">
+            ⌘U
+          </span>
+        )}
       </div>
-      <div style={menuItemStyle} onClick={() => { toggleStrikethroughMark(editor); onClose(); }}>
-        <span style={iconStyle}><del>S</del></span>
+      <div 
+        className="cursor-pointer px-3 py-2 flex items-center gap-3 text-sm text-gray-600 transition-colors rounded hover:bg-gray-50 my-0.5"
+        onClick={() => { toggleStrikethroughMark(editor); onClose(); }}
+      >
+        <span className="flex items-center justify-center w-6 h-6 rounded bg-gray-50">
+          <span className="line-through">S</span>
+        </span>
         Strikethrough
-        {isMarkActive(editor, 'strikethrough') && <span style={shortcutStyle}>⌘D</span>}
+        {isMarkActive(editor, 'strikethrough') && (
+          <span className="ml-auto text-xs text-gray-500 px-1.5 py-0.5 bg-gray-50 rounded">
+            ⌘D
+          </span>
+        )}
       </div>
-      <div style={{ height: '1px', backgroundColor: '#e2e8f0', margin: '4px 0' }} />
-      <div style={menuItemStyle} onClick={() => { editor.insertText('Custom text'); onClose(); }}>
-        <span style={iconStyle}>T</span>
+      <div className="h-1 bg-gray-200 my-4" />
+      <div 
+        className="cursor-pointer px-3 py-2 flex items-center gap-3 text-sm text-gray-600 transition-colors rounded hover:bg-gray-50 my-0.5"
+        onClick={() => { editor.insertText('Custom text'); onClose(); }}
+      >
+        <span className="flex items-center justify-center w-6 h-6 rounded bg-gray-50">
+          T
+        </span>
         Insert Text
       </div>
-      <div style={menuItemStyle} onClick={() => {
-        const selection = editor.selection;
-        if (selection) {
-          const fragment = editor.getFragment();
-          const string = fragment.map(node => Editor.string(editor, node)).join('\n');
-          navigator.clipboard.writeText(string);
-        }
-        onClose();
-      }}>
-        <span style={iconStyle}>📋</span>
+      <div 
+        className="cursor-pointer px-3 py-2 flex items-center gap-3 text-sm text-gray-600 transition-colors rounded hover:bg-gray-50 my-0.5"
+        onClick={() => {
+          const selection = editor.selection;
+          if (selection) {
+            const fragment = editor.getFragment();
+            const string = fragment.map(node => Editor.string(editor, node)).join('\n');
+            navigator.clipboard.writeText(string);
+          }
+          onClose();
+        }}
+      >
+        <span className="flex items-center justify-center w-6 h-6 rounded bg-gray-50">
+          📋
+        </span>
         Copy
       </div>
     </div>

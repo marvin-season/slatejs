@@ -111,16 +111,10 @@ export const CommandMenu: React.FC<CommandMenuProps> = ({
 
   return (
     <div
+      className="absolute z-50 bg-white rounded-lg shadow-lg p-1 min-w-[180px]"
       style={{
-        position: 'absolute',
-        zIndex: 1000,
         top: `${top + window.scrollY}px`,
         left: `${left}px`,
-        backgroundColor: '#ffffff',
-        borderRadius: '6px',
-        boxShadow: '0 4px 12px rgba(0, 0, 0, 0.1)',
-        padding: '4px',
-        minWidth: '180px',
       }}
       onMouseDown={e => e.preventDefault()}
     >
@@ -128,34 +122,14 @@ export const CommandMenu: React.FC<CommandMenuProps> = ({
         <div
           key={i}
           onClick={command.action}
-          style={{
-            padding: '8px 12px',
-            display: 'flex',
-            alignItems: 'center',
-            gap: '8px',
-            cursor: 'pointer',
-            borderRadius: '4px',
-            fontSize: '14px',
-            color: '#4a5568',
-            backgroundColor: i === selectedIndex ? '#edf2f7' : 'transparent',
-            transition: 'all 0.2s',
-            ':hover': {
-              backgroundColor: '#f7fafc',
-            },
-          }}
+          className={`p-2 flex items-center gap-2 cursor-pointer rounded text-sm text-gray-600 transition-colors
+                     ${i === selectedIndex ? 'bg-gray-100' : 'hover:bg-gray-50'}`}
           onMouseEnter={() => setSelectedIndex(i)}
         >
-          <span style={{ 
-            width: '24px', 
-            height: '24px',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            backgroundColor: i === selectedIndex ? '#e2e8f0' : '#f7fafc',
-            borderRadius: '4px',
-            fontSize: command.icon.length > 2 ? '12px' : '16px',
-            transition: 'all 0.2s',
-          }}>
+          <span className={`w-6 h-6 flex items-center justify-center rounded
+                          ${i === selectedIndex ? 'bg-gray-200' : 'bg-gray-50'}
+                          ${command.icon.length > 2 ? 'text-xs' : 'text-base'}
+                          transition-colors`}>
             {command.icon}
           </span>
           {command.title}

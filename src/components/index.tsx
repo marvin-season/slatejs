@@ -15,11 +15,11 @@ export const Element: FC<RenderElementProps> = props => {
     case 'input':
       return <InputComponents {...props} />;
     case 'heading-one':
-      return <h1 {...attributes} style={{ fontSize: '2em', marginBottom: '0.5em' }}>{children}</h1>;
+      return <h1 {...attributes} className="text-3xl mb-4 font-semibold">{children}</h1>;
     case 'heading-two':
-      return <h2 {...attributes} style={{ fontSize: '1.5em', marginBottom: '0.5em' }}>{children}</h2>;
+      return <h2 {...attributes} className="text-2xl mb-3 font-medium">{children}</h2>;
     case 'paragraph':
-      return <p {...attributes} style={{ marginBottom: '1em' }}>{children}</p>;
+      return <p {...attributes} className="mb-4">{children}</p>;
     default:
       return <p {...attributes}>{children}</p>;
   }
@@ -34,9 +34,7 @@ export const Text: FC<RenderElementProps> = props => {
       // clicking the end of a block puts the cursor inside the inline
       // instead of inside the final {text: ''} node
       // https://github.com/ianstormtaylor/slate/issues/4704#issuecomment-1006696364
-      style={{
-        paddingLeft: '0.1px',
-      }}
+      className="pl-[0.1px]"
       {...attributes}
     >
       {children}
